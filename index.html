@@ -224,12 +224,10 @@
     animation:heroScroll 26s linear infinite;
   }
   .hero-slide{
-    flex:0 0 auto; border:1.5px dashed var(--line); border-radius:10px;
-    background:var(--paper-warm); color:var(--ink-faint);
-    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px;
+    flex:0 0 auto; border-radius:10px; overflow:hidden;
+    background:var(--paper-warm); box-shadow:0 1px 4px rgba(0,0,0,.08);
   }
-  .hero-slide svg{width:28px; height:28px; opacity:.6;}
-  .hero-slide span{font-size:.74rem; letter-spacing:.04em;}
+  .hero-slide img{width:100%; height:100%; object-fit:cover; display:block;}
   @keyframes heroScroll{
     from{transform:translateX(0);}
     to{transform:translateX(-50%);}
@@ -305,6 +303,14 @@
   .course-card{
     background:var(--paper); border:1px solid var(--line); border-radius:4px;
     padding:36px 30px; text-align:left; position:relative;
+  }
+  .course-photo{
+    aspect-ratio:4/3; border-radius:6px; overflow:hidden; margin-bottom:22px;
+    background:var(--paper-warm);
+  }
+  .course-photo img{
+    width:100%; height:100%; object-fit:cover; display:block;
+    transition:opacity .5s ease;
   }
   .course-card .num{
     font-family:'Noto Sans JP',sans-serif; font-weight:700; font-size:.85rem; color:var(--ink-faint);
@@ -471,24 +477,9 @@
 <section class="hero" id="top">
   <div class="hero-inner">
     <div class="hero-eyebrow">RYUKYU GLASS STUDIO SIZUKU</div>
-    <div class="hero-slider" aria-label="工房と作品の写真">
-      <div class="hero-slider-track">
-        <!-- 実際の写真に差し替える場合は各 .hero-slide の中身を
-             <img src="photos/xxx.jpg" alt="..." style="width:100%;height:100%;object-fit:cover;border-radius:8px;">
-             に置き換えてください。あえて縦横比・サイズは統一していません。 -->
-        <div class="hero-slide" style="width:170px;height:150px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3.2"/><path d="M9 5l1.2-2h3.6L15 5"/></svg><span>写真準備中</span></div>
-        <div class="hero-slide" style="width:210px;height:170px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3.2"/><path d="M9 5l1.2-2h3.6L15 5"/></svg><span>写真準備中</span></div>
-        <div class="hero-slide" style="width:150px;height:190px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3.2"/><path d="M9 5l1.2-2h3.6L15 5"/></svg><span>写真準備中</span></div>
-        <div class="hero-slide" style="width:190px;height:160px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3.2"/><path d="M9 5l1.2-2h3.6L15 5"/></svg><span>写真準備中</span></div>
-        <div class="hero-slide" style="width:160px;height:180px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3.2"/><path d="M9 5l1.2-2h3.6L15 5"/></svg><span>写真準備中</span></div>
-        <div class="hero-slide" style="width:200px;height:150px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3.2"/><path d="M9 5l1.2-2h3.6L15 5"/></svg><span>写真準備中</span></div>
-        <!-- 継ぎ目なく自動スクロールさせるための複製（実写真に差し替える際は同じ内容を複製してください） -->
-        <div class="hero-slide" style="width:170px;height:150px;" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3.2"/><path d="M9 5l1.2-2h3.6L15 5"/></svg><span>写真準備中</span></div>
-        <div class="hero-slide" style="width:210px;height:170px;" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3.2"/><path d="M9 5l1.2-2h3.6L15 5"/></svg><span>写真準備中</span></div>
-        <div class="hero-slide" style="width:150px;height:190px;" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3.2"/><path d="M9 5l1.2-2h3.6L15 5"/></svg><span>写真準備中</span></div>
-        <div class="hero-slide" style="width:190px;height:160px;" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3.2"/><path d="M9 5l1.2-2h3.6L15 5"/></svg><span>写真準備中</span></div>
-        <div class="hero-slide" style="width:160px;height:180px;" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3.2"/><path d="M9 5l1.2-2h3.6L15 5"/></svg><span>写真準備中</span></div>
-        <div class="hero-slide" style="width:200px;height:150px;" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3.2"/><path d="M9 5l1.2-2h3.6L15 5"/></svg><span>写真準備中</span></div>
+    <div class="hero-slider" aria-label="体験の様子">
+      <div class="hero-slider-track" id="heroSliderTrack">
+        <!-- JSが体験写真フォルダからランダムに選んで挿入します（重複なし） -->
       </div>
     </div>
     <h1><span class="main-line">沖縄・読谷村の琉球ガラス工房 雫</span><br><span class="tagline signature">貴方にも幸せの雫を、ポトリ。</span></h1>
@@ -525,18 +516,21 @@
     </div>
     <div class="course-grid reveal">
       <div class="course-card">
+        <div class="course-photo" data-course="fuki" data-alt="吹きガラス体験の様子"><img alt=""></div>
         <span class="num">01</span>
         <h3>吹きガラス体験</h3>
         <p>沖縄の時間をグラスに閉じ込めて、職人と一緒につくるあなただけの琉球ガラス。色や模様を選び、溶けたガラスに息を吹き込んで成形します。</p>
         <span class="age">対象：3歳〜</span>
       </div>
       <div class="course-card">
+        <div class="course-photo" data-course="tombodama" data-alt="とんぼ玉体験の様子"><img alt=""></div>
         <span class="num">02</span>
         <h3>とんぼ玉体験</h3>
         <p>色や模様を組み合わせて、世界にひとつだけのとんぼ玉を作れます。アクセサリーやお守りにも人気です。</p>
         <span class="age">対象：小学生〜</span>
       </div>
       <div class="course-card">
+        <div class="course-photo" data-course="resin" data-alt="レジン体験の様子"><img alt=""></div>
         <span class="num">03</span>
         <h3>レジン体験</h3>
         <p>お好きなパーツを選んで、キーホルダーなどオリジナル雑貨を制作できます。</p>
@@ -715,6 +709,78 @@
     entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
   }, {threshold:.15});
   revealEls.forEach(el => io.observe(el));
+
+  /* ---------- 体験写真：ヒーローのランダム表示 & 各体験カードのローテーション ---------- */
+  const COURSE_PHOTOS = {
+    fuki: Array.from({length:11}, (_,i)=>`photos/fuki/fuki${String(i+1).padStart(2,'0')}.jpg`),
+    tombodama: Array.from({length:1}, (_,i)=>`photos/tombodama/tombodama${String(i+1).padStart(2,'0')}.jpg`),
+    resin: Array.from({length:5}, (_,i)=>`photos/resin/resin${String(i+1).padStart(2,'0')}.jpg`)
+  };
+  const COURSE_ALT = {
+    fuki: '吹きガラス体験の様子',
+    tombodama: 'とんぼ玉体験の様子',
+    resin: 'レジン体験の様子'
+  };
+
+  function shuffle(arr){
+    const a = arr.slice();
+    for(let i = a.length - 1; i > 0; i--){
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  // ヒーロー：3つの体験フォルダ全体からランダムに重複なく選んで自動スクロール表示
+  const heroTrack = document.getElementById('heroSliderTrack');
+  if(heroTrack){
+    const allPhotos = []
+      .concat(COURSE_PHOTOS.fuki.map(src => ({src, alt: COURSE_ALT.fuki})))
+      .concat(COURSE_PHOTOS.tombodama.map(src => ({src, alt: COURSE_ALT.tombodama})))
+      .concat(COURSE_PHOTOS.resin.map(src => ({src, alt: COURSE_ALT.resin})));
+    const heights = [150, 170, 190];
+    const picked = shuffle(allPhotos).slice(0, Math.min(8, allPhotos.length));
+
+    function buildSlide(photo, i, isDuplicate){
+      const h = heights[i % heights.length];
+      const slide = document.createElement('div');
+      slide.className = 'hero-slide';
+      slide.style.height = h + 'px';
+      slide.style.width = Math.round(h * 0.78) + 'px';
+      if(isDuplicate) slide.setAttribute('aria-hidden', 'true');
+      const img = document.createElement('img');
+      img.src = photo.src;
+      img.alt = isDuplicate ? '' : photo.alt;
+      img.loading = 'lazy';
+      slide.appendChild(img);
+      return slide;
+    }
+    picked.forEach((p, i) => heroTrack.appendChild(buildSlide(p, i, false)));
+    // 継ぎ目なく自動スクロールさせるための複製（表示される写真そのものは上のpickedで重複なく選定済み）
+    picked.forEach((p, i) => heroTrack.appendChild(buildSlide(p, i, true)));
+  }
+
+  // 各体験カード：写真が複数ある場合は一定間隔でクロスフェード表示
+  document.querySelectorAll('.course-photo').forEach(box => {
+    const course = box.getAttribute('data-course');
+    const photos = COURSE_PHOTOS[course] || [];
+    const img = box.querySelector('img');
+    if(!photos.length || !img) return;
+    let idx = 0;
+    img.src = photos[0];
+    img.alt = box.getAttribute('data-alt') || '';
+    img.loading = 'lazy';
+    if(photos.length > 1){
+      setInterval(() => {
+        idx = (idx + 1) % photos.length;
+        img.style.opacity = 0;
+        setTimeout(() => {
+          img.src = photos[idx];
+          img.style.opacity = 1;
+        }, 500);
+      }, 4000);
+    }
+  });
 </script>
 
 </body>
