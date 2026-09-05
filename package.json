@@ -1,0 +1,12 @@
+{
+  "name": "sizuku-taiken-site",
+  "version": "1.0.0",
+  "private": true,
+  "description": "琉球ガラス工房 雫 - sizuku-taiken.com のゲートウェイページ",
+  "scripts": {
+    "start": "serve -l ${PORT:-3000} ."
+  },
+  "dependencies": {
+    "serve": "^14.2.4"
+  }
+}
