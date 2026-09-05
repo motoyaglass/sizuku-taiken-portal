@@ -13,16 +13,16 @@ npx serve .
 
 ## 1. GitHubにアップロードする
 
-1. https://github.com/new で新しいリポジトリを作成する（例: `sizuku-taiken-site`）。Public / Private どちらでも構いません。
+1. https://github.com/new で新しいリポジトリを作成する（例: `sizuku-taiken-portal`）。Public / Private どちらでも構いません。
 2. このフォルダの中身一式をリポジトリにアップロードします。ターミナルが使える場合は次のコマンドで一気にプッシュできます。
 
 ```bash
-cd sizuku-taiken-site
+cd sizuku-taiken-portal
 git init
 git add .
 git commit -m "Initial commit: sizuku-taiken.com gateway page"
 git branch -M main
-git remote add origin https://github.com/<あなたのユーザー名>/sizuku-taiken-site.git
+git remote add origin https://github.com/<あなたのユーザー名>/sizuku-taiken-portal.git
 git push -u origin main
 ```
 
@@ -32,7 +32,7 @@ git push -u origin main
 
 1. https://railway.com/new を開く
 2. 「Deploy from GitHub repo」を選択し、Railwayに自分のGitHubアカウントを連携する
-3. 先ほど作成した `sizuku-taiken-site` リポジトリを選択する
+3. 先ほど作成した `sizuku-taiken-portal` リポジトリを選択する
 4. このリポジトリには `package.json` が含まれているので、Railwayが自動的にNode.js環境と判断し、`npm install` → `npm start`（`serve` コマンドで静的ファイルを配信）を実行します。特別な設定は不要です
 5. デプロイが完了すると `https://xxxxx.up.railway.app` のようなURLが発行されるので、まずそこで正しく表示されるか確認してください
 
