@@ -215,25 +215,13 @@
     font-weight:700; margin-bottom:28px;
   }
   .hero-slider{
-    width:100%; max-width:640px; min-width:0; margin:0 auto 36px; overflow:hidden;
-    -webkit-mask-image:linear-gradient(to right, transparent, #000 10%, #000 90%, transparent);
-    mask-image:linear-gradient(to right, transparent, #000 10%, #000 90%, transparent);
+    width:100%; max-width:360px; min-width:0; margin:0 auto 36px;
+    aspect-ratio:4/3; border-radius:12px; overflow:hidden;
+    background:var(--paper-warm); box-shadow:0 1px 6px rgba(0,0,0,.1);
   }
-  .hero-slider-track{
-    display:flex; align-items:center; gap:16px; width:max-content;
-    animation:heroScroll 26s linear infinite;
-  }
-  .hero-slide{
-    flex:0 0 auto; border-radius:10px; overflow:hidden;
-    background:var(--paper-warm); box-shadow:0 1px 4px rgba(0,0,0,.08);
-  }
-  .hero-slide img{width:100%; height:100%; object-fit:cover; display:block;}
-  @keyframes heroScroll{
-    from{transform:translateX(0);}
-    to{transform:translateX(-50%);}
-  }
-  @media (prefers-reduced-motion: reduce){
-    .hero-slider-track{animation:none;}
+  .hero-slider img{
+    width:100%; height:100%; object-fit:cover; display:block;
+    transition:opacity .6s ease;
   }
   .hero h1{
     font-size:clamp(1.5rem, 3.6vw, 2.15rem);
@@ -477,10 +465,8 @@
 <section class="hero" id="top">
   <div class="hero-inner">
     <div class="hero-eyebrow">RYUKYU GLASS STUDIO SIZUKU</div>
-    <div class="hero-slider" aria-label="体験の様子">
-      <div class="hero-slider-track" id="heroSliderTrack">
-        <!-- JSが体験写真フォルダからランダムに選んで挿入します（重複なし） -->
-      </div>
+    <div class="hero-slider" id="heroSlider" aria-label="体験の様子">
+      <!-- JSが体験写真フォルダからランダムに選び、フェードで切り替えます（重複なし） -->
     </div>
     <h1><span class="main-line">沖縄・読谷村の琉球ガラス工房 雫</span><br><span class="tagline signature">貴方にも幸せの雫を、ポトリ。</span></h1>
     <p class="lead">自然いっぱいな読谷村にある、夫婦で営む小さなガラス工房です。<br>まずは体験をご予約のうえ、カタログでつくりたい形をイメージしてお越しください。</p>
@@ -731,33 +717,36 @@
     return a;
   }
 
-  // ヒーロー：3つの体験フォルダ全体からランダムに重複なく選んで自動スクロール表示
-  const heroTrack = document.getElementById('heroSliderTrack');
-  if(heroTrack){
+  // ヒーロー：3つの体験フォルダ全体からランダムな順番でクロスフェード表示（1周する間は重複なし）
+  const heroSlider = document.getElementById('heroSlider');
+  if(heroSlider){
     const allPhotos = []
       .concat(COURSE_PHOTOS.fuki.map(src => ({src, alt: COURSE_ALT.fuki})))
       .concat(COURSE_PHOTOS.tombodama.map(src => ({src, alt: COURSE_ALT.tombodama})))
       .concat(COURSE_PHOTOS.resin.map(src => ({src, alt: COURSE_ALT.resin})));
-    const heights = [150, 170, 190];
-    const picked = shuffle(allPhotos).slice(0, Math.min(8, allPhotos.length));
 
-    function buildSlide(photo, i, isDuplicate){
-      const h = heights[i % heights.length];
-      const slide = document.createElement('div');
-      slide.className = 'hero-slide';
-      slide.style.height = h + 'px';
-      slide.style.width = Math.round(h * 0.78) + 'px';
-      if(isDuplicate) slide.setAttribute('aria-hidden', 'true');
-      const img = document.createElement('img');
-      img.src = photo.src;
-      img.alt = isDuplicate ? '' : photo.alt;
-      img.loading = 'lazy';
-      slide.appendChild(img);
-      return slide;
+    let order = shuffle(allPhotos);
+    let pos = 0;
+    const img = document.createElement('img');
+    img.src = order[0].src;
+    img.alt = order[0].alt;
+    heroSlider.appendChild(img);
+
+    if(order.length > 1){
+      setInterval(() => {
+        pos++;
+        if(pos >= order.length){ // 1周したら重複しない様に並べ直して次の周へ
+          order = shuffle(allPhotos);
+          pos = 0;
+        }
+        img.style.opacity = 0;
+        setTimeout(() => {
+          img.src = order[pos].src;
+          img.alt = order[pos].alt;
+          img.style.opacity = 1;
+        }, 600);
+      }, 4200);
     }
-    picked.forEach((p, i) => heroTrack.appendChild(buildSlide(p, i, false)));
-    // 継ぎ目なく自動スクロールさせるための複製（表示される写真そのものは上のpickedで重複なく選定済み）
-    picked.forEach((p, i) => heroTrack.appendChild(buildSlide(p, i, true)));
   }
 
   // 各体験カード：写真が複数ある場合は一定間隔でクロスフェード表示
