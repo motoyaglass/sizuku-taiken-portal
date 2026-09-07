@@ -376,9 +376,10 @@
   .access-info dt{font-weight:700; color:var(--stamp); font-size:.82rem; letter-spacing:.06em; white-space:nowrap; padding-top:2px;}
   .access-info dd{color:var(--ink-soft); font-size:.94rem;}
   .access-info dd a{color:var(--ink); font-weight:700; border-bottom:1px solid var(--stamp);}
-  .access-social{display:flex; gap:14px; margin-top:24px;}
+  .access-social{display:flex; flex-wrap:wrap; gap:14px; margin-top:24px;}
   .access-social a{
     border:1px solid var(--ink); border-radius:999px; padding:8px 18px; font-size:.82rem; font-weight:700;
+    white-space:nowrap;
     transition:background .3s ease, color .3s ease;
   }
   .access-social a:hover{background:var(--ink); color:var(--paper);}
