@@ -255,12 +255,13 @@
     margin-bottom:48px;
     font-weight:400;
     color:var(--paper);
-    text-shadow:0 1px 3px rgba(0,0,0,.65), 0 4px 20px rgba(0,0,0,.4);
+    /* 暗い写真の時に全体が重く見えないよう、影を黒ではなく白っぽい光暈にする */
+    text-shadow:0 0 3px rgba(255,255,255,.5), 0 4px 22px rgba(255,255,255,.3);
     word-break:keep-all; /* 折り返す場合も単語の途中で切らない */
   }
   .hero h1 .main-line{
     color:var(--stamp-soft); font-weight:700;
-    text-shadow:0 1px 3px rgba(0,0,0,.7), 0 2px 24px rgba(0,0,0,.5);
+    text-shadow:0 0 3px rgba(255,255,255,.55), 0 2px 26px rgba(255,255,255,.35);
   }
   .hero-actions{display:flex; gap:16px; justify-content:center; flex-wrap:wrap; margin-bottom:56px;}
   .hero .btn-solid{background:var(--stamp); border-color:var(--stamp); color:var(--paper); box-shadow:0 4px 18px rgba(0,0,0,.25);}
@@ -273,7 +274,7 @@
   .scroll-cue{
     display:inline-flex; flex-direction:column; align-items:center; gap:8px;
     font-size:.68rem; letter-spacing:.24em; color:rgba(255,255,255,.85);
-    text-shadow:0 1px 4px rgba(0,0,0,.6);
+    text-shadow:0 0 4px rgba(255,255,255,.4);
   }
   .scroll-cue .line{width:1px; height:34px; background:rgba(255,255,255,.45); position:relative; overflow:hidden;}
   .scroll-cue .line::after{
