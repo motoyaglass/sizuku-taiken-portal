@@ -26,6 +26,7 @@
 <meta name="twitter:image" content="https://sizuku-taiken.com/og-image.png">
 
 <link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -207,20 +208,25 @@
     display:flex; align-items:center; justify-content:center;
     text-align:center;
     padding:140px 24px 80px;
-    background:var(--ink); /* 画像読み込み前のフォールバック */
-    overflow:hidden;
+    background:var(--paper-warm);
   }
-  .hero-bg{position:absolute; inset:0; z-index:0;}
-  .hero-bg img{
-    width:100%; height:100%; object-fit:cover; display:block;
-    opacity:0; transition:opacity 1.4s ease;
+  .hero-inner{max-width:900px; width:100%; min-width:0;}
+  .hero-slider{
+    display:flex; gap:14px; width:100%; max-width:480px; min-width:0; margin:0 auto 36px;
+    overflow-x:auto; overflow-y:hidden; -webkit-overflow-scrolling:touch;
+    scroll-snap-type:x mandatory; padding-bottom:6px;
   }
-  .hero-bg img.is-active{opacity:1;}
-  .hero-overlay{
-    position:absolute; inset:0; z-index:1;
-    background:linear-gradient(180deg, rgba(20,20,18,.5), rgba(20,20,18,.45) 45%, rgba(20,20,18,.65));
+  .hero-slider::-webkit-scrollbar{height:6px;}
+  .hero-slider::-webkit-scrollbar-track{background:transparent;}
+  .hero-slider::-webkit-scrollbar-thumb{background:var(--line); border-radius:3px;}
+  .hero-slide{
+    flex:0 0 auto; width:200px; aspect-ratio:4/3; border-radius:14px; overflow:hidden;
+    scroll-snap-align:start; background:var(--paper); box-shadow:0 6px 20px rgba(120,90,60,.14);
   }
-  .hero-inner{position:relative; z-index:2; max-width:900px; width:100%; min-width:0;}
+  .hero-slide img{width:100%; height:100%; object-fit:cover; display:block;}
+  .hero-slider-hint{
+    font-size:.72rem; letter-spacing:.08em; color:var(--ink-faint); margin-bottom:26px;
+  }
   .hero h1{
     font-size:clamp(1.9rem, 4.6vw, 2.9rem);
     line-height:1.5;
@@ -229,26 +235,19 @@
     word-break:keep-all; /* 折り返す場合も単語の途中で切らない */
   }
   .hero h1 .main-line{
-    color:#fff; font-weight:700;
+    color:var(--stamp); font-weight:700;
   }
   .hero-actions{display:flex; gap:16px; justify-content:center; flex-wrap:wrap; margin-bottom:56px;}
-  .hero .btn-solid{background:#fff; color:var(--ink); border-color:#fff;}
-  .hero .btn-solid:hover{background:var(--stamp); color:#fff; border-color:var(--stamp); gap:14px;}
-  .hero .btn-outline{background:transparent; color:#fff; border-color:rgba(255,255,255,.7);}
-  .hero .btn-outline:hover{background:#fff; color:var(--ink); border-color:#fff; gap:14px;}
   .scroll-cue{
     display:inline-flex; flex-direction:column; align-items:center; gap:8px;
-    font-size:.68rem; letter-spacing:.24em; color:rgba(255,255,255,.7);
+    font-size:.68rem; letter-spacing:.24em; color:var(--ink-faint);
   }
-  .scroll-cue .line{width:1px; height:34px; background:rgba(255,255,255,.35); position:relative; overflow:hidden;}
+  .scroll-cue .line{width:1px; height:34px; background:var(--line); position:relative; overflow:hidden;}
   .scroll-cue .line::after{
     content:""; position:absolute; top:-100%; left:0; width:100%; height:100%;
-    background:#fff; animation:scrollline 1.8s ease-in-out infinite;
+    background:var(--ink); animation:scrollline 1.8s ease-in-out infinite;
   }
   @keyframes scrollline{ 0%{top:-100%;} 60%{top:100%;} 100%{top:100%;} }
-  @media (prefers-reduced-motion: reduce){
-    .hero-bg img{transition:none;}
-  }
 
   /* ---------- Buttons ---------- */
   .btn{
@@ -457,11 +456,11 @@
 </header>
 
 <section class="hero" id="top">
-  <div class="hero-bg" id="heroBg" aria-hidden="true">
-    <!-- JSが体験写真フォルダからランダムに選び、背景写真として一定時間ごとにフェード切り替えします -->
-  </div>
-  <div class="hero-overlay"></div>
   <div class="hero-inner">
+    <div class="hero-slider" id="heroSlider" aria-label="体験の様子">
+      <!-- JSが体験写真フォルダからランダムに重複なく選んで静止画を並べます。横スクロールで見られます -->
+    </div>
+    <div class="hero-slider-hint">← スワイプ・スクロールで体験の様子をもっと見る →</div>
     <h1><span class="main-line">沖縄・読谷村の琉球ガラス工房 雫</span></h1>
     <div class="hero-actions">
       <a class="btn btn-solid" href="https://reserve.sizuku-taiken.com">体験をご予約する →</a>
@@ -709,44 +708,26 @@
     return a;
   }
 
-  // ヒーロー：3つの体験フォルダ全体からランダムな順番で背景写真として表示（1周する間は重複なし）。
-  // 画面全体の背景として敷き、一定時間ごとにクロスフェードで次の写真へ切り替える。
-  const heroBg = document.getElementById('heroBg');
-  if(heroBg){
+  // ヒーロー：3つの体験フォルダ全体からランダムに重複なく静止画を選んで並べ、
+  // 自動では動かさず、横スクロール／スワイプで見てもらう。
+  const heroSlider = document.getElementById('heroSlider');
+  if(heroSlider){
     const allPhotos = []
       .concat(COURSE_PHOTOS.fuki.map(src => ({src, alt: COURSE_ALT.fuki})))
       .concat(COURSE_PHOTOS.tombodama.map(src => ({src, alt: COURSE_ALT.tombodama})))
       .concat(COURSE_PHOTOS.resin.map(src => ({src, alt: COURSE_ALT.resin})));
 
-    let order = shuffle(allPhotos);
-    let pos = 0;
-
-    function makeImg(photo){
+    const picked = shuffle(allPhotos).slice(0, Math.min(8, allPhotos.length));
+    picked.forEach(photo => {
+      const slide = document.createElement('div');
+      slide.className = 'hero-slide';
       const img = document.createElement('img');
       img.src = photo.src;
       img.alt = photo.alt;
-      return img;
-    }
-
-    let currentImg = makeImg(order[0]);
-    heroBg.appendChild(currentImg);
-    requestAnimationFrame(() => currentImg.classList.add('is-active'));
-
-    if(order.length > 1){
-      setInterval(() => {
-        pos++;
-        if(pos >= order.length){ // 1周したら重複しない様に並べ直して次の周へ
-          order = shuffle(allPhotos);
-          pos = 0;
-        }
-        const nextImg = makeImg(order[pos]);
-        heroBg.appendChild(nextImg);
-        requestAnimationFrame(() => nextImg.classList.add('is-active'));
-        const prevImg = currentImg;
-        currentImg = nextImg;
-        setTimeout(() => prevImg.remove(), 1500); // フェード完了後に前の写真を片付ける
-      }, 5500);
-    }
+      img.loading = 'lazy';
+      slide.appendChild(img);
+      heroSlider.appendChild(slide);
+    });
   }
 
   // 各体験カード：写真が複数ある場合は一定間隔でクロスフェード表示
