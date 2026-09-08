@@ -219,11 +219,13 @@
   }
   .hero-bg img.is-active{opacity:1;}
   /* 屋号の色(stamp)を全画面写真にも溶け込ませ、冷たく見えないように暖色寄りの色被りを重ねる */
+  /* さらに下部を薄い白のフェードにして、次のセクションの白背景へ自然に溶け込ませる */
   .hero-overlay{
     position:absolute; inset:0; z-index:1;
     background:
-      radial-gradient(120% 90% at 50% 8%, rgba(var(--stamp-rgb),.4) 0%, rgba(var(--stamp-rgb),0) 55%),
-      linear-gradient(180deg, rgba(24,20,16,.35) 0%, rgba(20,17,14,.5) 45%, rgba(16,14,12,.78) 100%);
+      linear-gradient(180deg, rgba(255,255,255,0) 55%, rgba(255,255,255,.55) 82%, rgba(255,255,255,.92) 100%),
+      radial-gradient(120% 90% at 50% 8%, rgba(var(--stamp-rgb),.35) 0%, rgba(var(--stamp-rgb),0) 55%),
+      linear-gradient(180deg, rgba(24,20,16,.32) 0%, rgba(20,17,14,.45) 45%, rgba(16,14,12,.7) 100%);
   }
   .hero-inner{position:relative; z-index:2; max-width:900px; width:100%; min-width:0;}
   .hero-badge{
