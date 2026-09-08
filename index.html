@@ -220,28 +220,16 @@
     position:absolute; inset:0; z-index:1;
     background:linear-gradient(180deg, rgba(20,20,18,.5), rgba(20,20,18,.45) 45%, rgba(20,20,18,.65));
   }
-  .hero-inner{position:relative; z-index:2; max-width:640px; width:100%; min-width:0;}
-  .hero-eyebrow{
-    font-size:.78rem; letter-spacing:.32em; color:var(--stamp);
-    font-weight:700; margin-bottom:28px;
-  }
+  .hero-inner{position:relative; z-index:2; max-width:900px; width:100%; min-width:0;}
   .hero h1{
-    font-size:clamp(1.5rem, 3.6vw, 2.15rem);
-    line-height:1.7;
-    margin-bottom:18px;
+    font-size:clamp(1.9rem, 4.6vw, 2.9rem);
+    line-height:1.5;
+    margin-bottom:48px;
     font-weight:400;
+    word-break:keep-all; /* 折り返す場合も単語の途中で切らない */
   }
   .hero h1 .main-line{
     color:#fff; font-weight:700;
-  }
-  .hero .tagline{
-    display:block; font-size:clamp(1.5rem, 3vw, 1.9rem);
-    color:#fff; margin-bottom:26px;
-  }
-  .hero p.lead{
-    font-size:1rem; color:rgba(255,255,255,.86);
-    max-width:520px; margin:0 auto 38px;
-    font-weight:300;
   }
   .hero-actions{display:flex; gap:16px; justify-content:center; flex-wrap:wrap; margin-bottom:56px;}
   .hero .btn-solid{background:#fff; color:var(--ink); border-color:#fff;}
@@ -446,10 +434,6 @@
       font-size:calc(4.375vw + 3px);
       white-space:nowrap;
     }
-    .hero .tagline{
-      font-size:calc(4.375vw + 3px);
-      white-space:nowrap;
-    }
   }
 </style>
 </head>
@@ -478,9 +462,7 @@
   </div>
   <div class="hero-overlay"></div>
   <div class="hero-inner">
-    <div class="hero-eyebrow">RYUKYU GLASS STUDIO SIZUKU</div>
-    <h1><span class="main-line">沖縄・読谷村の琉球ガラス工房 雫</span><br><span class="tagline signature">貴方にも幸せの雫を、ポトリ。</span></h1>
-    <p class="lead">自然いっぱいな読谷村にある、夫婦で営む小さなガラス工房です。<br>まずは体験をご予約のうえ、カタログでつくりたい形をイメージしてお越しください。</p>
+    <h1><span class="main-line">沖縄・読谷村の琉球ガラス工房 雫</span></h1>
     <div class="hero-actions">
       <a class="btn btn-solid" href="https://reserve.sizuku-taiken.com">体験をご予約する →</a>
       <a class="btn btn-outline" href="https://catalog.sizuku-taiken.com">作品カタログを見る</a>
