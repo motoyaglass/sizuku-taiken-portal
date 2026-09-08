@@ -156,6 +156,7 @@
     --line:#e2e2e2;
     --stamp:#1c8081;
     --stamp-soft:#2a9d9e;
+    --stamp-rgb:28,128,129;
   }
   *{box-sizing:border-box; margin:0; padding:0;}
   html{scroll-behavior:smooth;}
@@ -208,44 +209,53 @@
     display:flex; align-items:center; justify-content:center;
     text-align:center;
     padding:140px 24px 80px;
-    background:var(--paper-warm);
+    overflow:hidden;
+    background:var(--ink);
   }
-  .hero-inner{max-width:900px; width:100%; min-width:0;}
-  .hero-slider{
-    display:flex; gap:14px; width:100%; max-width:480px; min-width:0; margin:0 auto 36px;
-    overflow-x:auto; overflow-y:hidden; -webkit-overflow-scrolling:touch;
-    scroll-snap-type:x mandatory; padding-bottom:6px;
+  .hero-bg{position:absolute; inset:0; z-index:0;}
+  .hero-bg img{
+    position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
+    opacity:0; transition:opacity 1.8s ease;
   }
-  .hero-slider::-webkit-scrollbar{height:6px;}
-  .hero-slider::-webkit-scrollbar-track{background:transparent;}
-  .hero-slider::-webkit-scrollbar-thumb{background:var(--line); border-radius:3px;}
-  .hero-slide{
-    flex:0 0 auto; width:200px; aspect-ratio:4/3; border-radius:14px; overflow:hidden;
-    scroll-snap-align:start; background:var(--paper); box-shadow:0 6px 20px rgba(120,90,60,.14);
+  .hero-bg img.is-active{opacity:1;}
+  /* 屋号の色(stamp)を全画面写真にも溶け込ませ、冷たく見えないように暖色寄りの色被りを重ねる */
+  .hero-overlay{
+    position:absolute; inset:0; z-index:1;
+    background:
+      radial-gradient(120% 90% at 50% 8%, rgba(var(--stamp-rgb),.4) 0%, rgba(var(--stamp-rgb),0) 55%),
+      linear-gradient(180deg, rgba(24,20,16,.35) 0%, rgba(20,17,14,.5) 45%, rgba(16,14,12,.78) 100%);
   }
-  .hero-slide img{width:100%; height:100%; object-fit:cover; display:block;}
-  .hero-slider-hint{
-    font-size:.72rem; letter-spacing:.08em; color:var(--ink-faint); margin-bottom:26px;
+  .hero-inner{position:relative; z-index:2; max-width:900px; width:100%; min-width:0;}
+  .hero-badge{
+    display:inline-block; background:var(--stamp); color:var(--paper);
+    font-size:.72rem; font-weight:700; letter-spacing:.22em;
+    padding:8px 20px; border-radius:999px; margin-bottom:28px;
   }
   .hero h1{
     font-size:clamp(1.9rem, 4.6vw, 2.9rem);
     line-height:1.5;
     margin-bottom:48px;
     font-weight:400;
+    color:var(--paper);
     word-break:keep-all; /* 折り返す場合も単語の途中で切らない */
   }
   .hero h1 .main-line{
-    color:var(--stamp); font-weight:700;
+    color:var(--stamp-soft); font-weight:700;
+    text-shadow:0 2px 24px rgba(0,0,0,.45);
   }
   .hero-actions{display:flex; gap:16px; justify-content:center; flex-wrap:wrap; margin-bottom:56px;}
+  .hero .btn-solid{background:var(--stamp); border-color:var(--stamp); color:var(--paper);}
+  .hero .btn-solid:hover{background:var(--paper); border-color:var(--paper); color:var(--stamp);}
+  .hero .btn-outline{background:transparent; border-color:rgba(255,255,255,.7); color:var(--paper);}
+  .hero .btn-outline:hover{background:var(--paper); border-color:var(--paper); color:var(--ink);}
   .scroll-cue{
     display:inline-flex; flex-direction:column; align-items:center; gap:8px;
-    font-size:.68rem; letter-spacing:.24em; color:var(--ink-faint);
+    font-size:.68rem; letter-spacing:.24em; color:rgba(255,255,255,.75);
   }
-  .scroll-cue .line{width:1px; height:34px; background:var(--line); position:relative; overflow:hidden;}
+  .scroll-cue .line{width:1px; height:34px; background:rgba(255,255,255,.35); position:relative; overflow:hidden;}
   .scroll-cue .line::after{
     content:""; position:absolute; top:-100%; left:0; width:100%; height:100%;
-    background:var(--ink); animation:scrollline 1.8s ease-in-out infinite;
+    background:var(--paper); animation:scrollline 1.8s ease-in-out infinite;
   }
   @keyframes scrollline{ 0%{top:-100%;} 60%{top:100%;} 100%{top:100%;} }
 
@@ -456,11 +466,12 @@
 </header>
 
 <section class="hero" id="top">
+  <div class="hero-bg" id="heroBg" aria-hidden="true">
+    <!-- JSが体験写真フォルダからランダムに選び、一定時間ごとにクロスフェードで切り替えます -->
+  </div>
+  <div class="hero-overlay" aria-hidden="true"></div>
   <div class="hero-inner">
-    <div class="hero-slider" id="heroSlider" aria-label="体験の様子">
-      <!-- JSが体験写真フォルダからランダムに重複なく選んで静止画を並べます。横スクロールで見られます -->
-    </div>
-    <div class="hero-slider-hint">← スワイプ・スクロールで体験の様子をもっと見る →</div>
+    <span class="hero-badge">OKINAWA・YOMITAN</span>
     <h1><span class="main-line">沖縄・読谷村の琉球ガラス工房 雫</span></h1>
     <div class="hero-actions">
       <a class="btn btn-solid" href="https://reserve.sizuku-taiken.com">体験をご予約する →</a>
@@ -708,26 +719,40 @@
     return a;
   }
 
-  // ヒーロー：3つの体験フォルダ全体からランダムに重複なく静止画を選んで並べ、
-  // 自動では動かさず、横スクロール／スワイプで見てもらう。
-  const heroSlider = document.getElementById('heroSlider');
-  if(heroSlider){
+  // ヒーロー：3つの体験フォルダ全体からランダムに写真を選び、
+  // 画面いっぱいの背景として一定時間ごとにクロスフェードで切り替える。
+  const heroBg = document.getElementById('heroBg');
+  if(heroBg){
     const allPhotos = []
       .concat(COURSE_PHOTOS.fuki.map(src => ({src, alt: COURSE_ALT.fuki})))
       .concat(COURSE_PHOTOS.tombodama.map(src => ({src, alt: COURSE_ALT.tombodama})))
       .concat(COURSE_PHOTOS.resin.map(src => ({src, alt: COURSE_ALT.resin})));
 
-    const picked = shuffle(allPhotos).slice(0, Math.min(8, allPhotos.length));
-    picked.forEach(photo => {
-      const slide = document.createElement('div');
-      slide.className = 'hero-slide';
-      const img = document.createElement('img');
-      img.src = photo.src;
-      img.alt = photo.alt;
-      img.loading = 'lazy';
-      slide.appendChild(img);
-      heroSlider.appendChild(slide);
-    });
+    const heroPhotos = shuffle(allPhotos).slice(0, Math.min(6, allPhotos.length));
+
+    if(heroPhotos.length){
+      let heroIndex = 0;
+      const firstImg = document.createElement('img');
+      firstImg.src = heroPhotos[0].src;
+      firstImg.alt = heroPhotos[0].alt;
+      firstImg.className = 'is-active';
+      heroBg.appendChild(firstImg);
+
+      if(heroPhotos.length > 1){
+        setInterval(() => {
+          heroIndex = (heroIndex + 1) % heroPhotos.length;
+          const next = heroPhotos[heroIndex];
+          const nextImg = document.createElement('img');
+          nextImg.src = next.src;
+          nextImg.alt = next.alt;
+          heroBg.appendChild(nextImg);
+          requestAnimationFrame(() => requestAnimationFrame(() => nextImg.classList.add('is-active')));
+
+          const oldImgs = heroBg.querySelectorAll('img:not(:last-child)');
+          setTimeout(() => oldImgs.forEach(img => img.remove()), 1800);
+        }, 5500);
+      }
+    }
   }
 
   // 各体験カード：写真が複数ある場合は一定間隔でクロスフェード表示
