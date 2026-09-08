@@ -219,11 +219,12 @@
   }
   .hero-bg img.is-active{opacity:1;}
   /* 屋号の色(stamp)を全画面写真にも溶け込ませ、冷たく見えないように暖色寄りの色被りを重ねる */
+  /* ランダムな写真の明るさに関わらず文字が読めるよう、全体をやや暗めのベースにする */
   .hero-overlay{
     position:absolute; inset:0; z-index:1;
     background:
-      radial-gradient(120% 90% at 50% 8%, rgba(var(--stamp-rgb),.35) 0%, rgba(var(--stamp-rgb),0) 55%),
-      linear-gradient(180deg, rgba(24,20,16,.32) 0%, rgba(20,17,14,.48) 45%, rgba(16,14,12,.74) 100%);
+      radial-gradient(120% 90% at 50% 8%, rgba(var(--stamp-rgb),.32) 0%, rgba(var(--stamp-rgb),0) 55%),
+      linear-gradient(180deg, rgba(18,16,14,.42) 0%, rgba(16,14,12,.5) 45%, rgba(14,12,11,.78) 100%);
   }
   /* 白フェードの代わりに、波型のシルエットで次のセクション(白背景)へはっきり区切る */
   .hero-wave{
@@ -233,10 +234,20 @@
   .hero-wave svg{display:block; width:100%; height:64px;}
   @media (min-width:820px){ .hero-wave svg{height:110px;} }
   .hero-inner{position:relative; z-index:3; max-width:900px; width:100%; min-width:0;}
+  /* 明るい写真が背景に来た時でも文字が同化しないよう、文字まわりだけさらに暗くする「スポットライト」を敷く */
+  .hero-inner::before{
+    content:"";
+    position:absolute; z-index:-1;
+    left:50%; top:50%; transform:translate(-50%,-50%);
+    width:min(1000px, 130%); height:135%;
+    background:radial-gradient(58% 62% at 50% 50%, rgba(0,0,0,.42) 0%, rgba(0,0,0,.18) 45%, rgba(0,0,0,0) 78%);
+    pointer-events:none;
+  }
   .hero-badge{
     display:inline-block; background:var(--stamp); color:var(--paper);
     font-size:.72rem; font-weight:700; letter-spacing:.22em;
     padding:8px 20px; border-radius:999px; margin-bottom:28px;
+    box-shadow:0 4px 18px rgba(0,0,0,.25);
   }
   .hero h1{
     font-size:clamp(1.9rem, 4.6vw, 2.9rem);
@@ -244,22 +255,27 @@
     margin-bottom:48px;
     font-weight:400;
     color:var(--paper);
+    text-shadow:0 1px 3px rgba(0,0,0,.65), 0 4px 20px rgba(0,0,0,.4);
     word-break:keep-all; /* 折り返す場合も単語の途中で切らない */
   }
   .hero h1 .main-line{
     color:var(--stamp-soft); font-weight:700;
-    text-shadow:0 2px 24px rgba(0,0,0,.45);
+    text-shadow:0 1px 3px rgba(0,0,0,.7), 0 2px 24px rgba(0,0,0,.5);
   }
   .hero-actions{display:flex; gap:16px; justify-content:center; flex-wrap:wrap; margin-bottom:56px;}
-  .hero .btn-solid{background:var(--stamp); border-color:var(--stamp); color:var(--paper);}
+  .hero .btn-solid{background:var(--stamp); border-color:var(--stamp); color:var(--paper); box-shadow:0 4px 18px rgba(0,0,0,.25);}
   .hero .btn-solid:hover{background:var(--paper); border-color:var(--paper); color:var(--stamp);}
-  .hero .btn-outline{background:transparent; border-color:rgba(255,255,255,.7); color:var(--paper);}
+  .hero .btn-outline{
+    background:rgba(0,0,0,.22); border-color:rgba(255,255,255,.8); color:var(--paper);
+    backdrop-filter:blur(3px); -webkit-backdrop-filter:blur(3px);
+  }
   .hero .btn-outline:hover{background:var(--paper); border-color:var(--paper); color:var(--ink);}
   .scroll-cue{
     display:inline-flex; flex-direction:column; align-items:center; gap:8px;
-    font-size:.68rem; letter-spacing:.24em; color:rgba(255,255,255,.75);
+    font-size:.68rem; letter-spacing:.24em; color:rgba(255,255,255,.85);
+    text-shadow:0 1px 4px rgba(0,0,0,.6);
   }
-  .scroll-cue .line{width:1px; height:34px; background:rgba(255,255,255,.35); position:relative; overflow:hidden;}
+  .scroll-cue .line{width:1px; height:34px; background:rgba(255,255,255,.45); position:relative; overflow:hidden;}
   .scroll-cue .line::after{
     content:""; position:absolute; top:-100%; left:0; width:100%; height:100%;
     background:var(--paper); animation:scrollline 1.8s ease-in-out infinite;
